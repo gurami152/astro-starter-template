@@ -1,3 +1,10 @@
+---
+import "../styles/global.css";
+import Seo from "../components/Seo.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,17 +13,15 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro Basics</title>
+		<!--<Seo title={title} description={description} />-->
 	</head>
-	<body>
+	<body class="flex flex-col min-h-screen">
+		<Header/>
+		<main class="flex-1 bg-teal-600">
 		<slot />
+		</main>
+		<Footer/>
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<script is:inline src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
