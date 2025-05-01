@@ -1,0 +1,22 @@
+---
+
+import {SUPPORTED_LANGS} from "../../utils/i18nConfig";
+const pathname = Astro.url?.pathname ?? '/';
+const baseLang = Astro.props.lang ?? pathname.split('/')[1] ?? 'uk';
+---
+
+{SUPPORTED_LANGS.filter(l => l !== baseLang).map(l => {
+    let path = pathname.startsWith(`/${baseLang}`)
+        ? pathname.replace(`/${baseLang}`, `/${l}`)
+        : `/${l}${pathname}`;
+
+    return (
+        <a
+                href={path}
+                class="text-primary font-bold"
+                data-astro-transition
+        >
+            {l.toUpperCase()}
+        </a>
+    );
+})}
