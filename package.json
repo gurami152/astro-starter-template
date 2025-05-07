@@ -1,6 +1,6 @@
 {
   "name": "create-astro-starter-template-znu",
-  "type": "module",
+  "type": "commonjs",
   "version": "1.0.4",
   "bin": {
     "create-astro-starter": "./create/index.js"
