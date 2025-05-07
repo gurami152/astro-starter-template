@@ -1,0 +1,22 @@
+{
+  "name": "create-astro-template-znu-1",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.2.0",
+    "@tailwindcss/vite": "^4.1.4",
+    "astro": "^5.7.11",
+    "create-create-app": "^7.3.0",
+    "flowbite": "^3.1.2",
+    "tailwindcss": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1"
+  }
+}
