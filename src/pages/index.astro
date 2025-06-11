@@ -1,8 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
-
----
-
-<Layout>
-	<h1 class="text-3xl text-center">Вітаємо у вашому Astro стартері!</h1>
-</Layout>
+// Перенаправлення на мовну версію за замовчуванням
+import { DEFAULT_LANG } from '@utils/i18n';
+return Astro.redirect(`/${DEFAULT_LANG}`);
+--- 

@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { LANGUAGES } from '@utils/i18n';
+
+export async function getStaticPaths() {
+	return LANGUAGES.map(lang => ({ params: { lang } }));
+}
+---
+
+<Layout title="Welcome to Astro">
+	<main>
+		<h1 class="text-3xl font-bold text-center my-16">
+			Welcome to <span class="text-gradient">Astro</span>
+		</h1>
+	</main>
+</Layout> 

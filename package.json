@@ -17,10 +17,12 @@
     "astro": "^5.7.4",
     "create-create-app": "^7.3.0",
     "flowbite": "^3.1.2",
+    "ioredis": "^5.6.1",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1"
+    "@types/node": "^22.14.1",
+    "prompts": "^2.4.2"
   },
   "files": [
     "create",
