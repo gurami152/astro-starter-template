@@ -1,0 +1,52 @@
+{
+  "pageTitle": "Modern Astro Starter Template",
+  "hero": {
+    "title": "Modern Astro Starter Template",
+    "subtitle": "A powerful starter template for Astro with Server-Side Rendering (SSR), ready-to-use Redis caching, and a Backend-for-Frontend (BFF) architecture."
+  },
+  "usage": {
+    "title": "Create a New Project",
+    "description": "To create a new project based on this template, run the following command in your terminal:",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
+  "features": {
+    "title": "Key Features",
+    "list": [
+      {
+        "title": "🚀 Astro SSR",
+        "description": "Configured for server-side rendering for maximum performance and SEO."
+      },
+      {
+        "title": "🛡️ Backend-for-Frontend (BFF)",
+        "description": "A secure pattern for working with APIs that protects your keys and simplifies logic."
+      },
+      {
+        "title": "⚡ Redis Caching",
+        "description": "Ready-to-use Redis integration for production-level data caching."
+      },
+      {
+        "title": "🎨 Tailwind CSS & Flowbite",
+        "description": "A modern utility-first CSS framework and a library of ready-made UI components."
+      },
+      {
+        "title": "🌐 Localization Ready",
+        "description": "The project structure is ready for internationalization and multi-language support."
+      },
+      {
+        "title": "🔌 TypeScript",
+        "description": "Strong typing for reliable and scalable code."
+      }
+    ]
+  },
+  "demo": {
+    "title": "API & Caching Demo",
+    "description": "Click the buttons below to make a request to our BFF API route. The cache status will be shown below.",
+    "button_posts": "Fetch \"Posts\"",
+    "button_products": "Fetch \"Products\"",
+    "result_placeholder": "The request result will appear here...",
+    "cache_status_hit": "Cache: HIT ⚡",
+    "cache_status_miss": "Cache: MISS 💿",
+    "loading": "Loading..."
+  }
+}
