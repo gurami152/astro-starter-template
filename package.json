@@ -1,25 +1,50 @@
 {
-  "name": "create-astro-template-znu",
-  "version": "1.1.0",
+  "name": "create-astro-starter-template-znu",
+  "type": "commonjs",
+  "version": "1.0.28",
+  "description": "This is an advanced Astro starter template with built-in features like i18n, Zustand for state management, and a modular structure. It's designed to help you quickly start new projects with a solid foundation.",
+  "main": "index.js",
   "bin": {
-    "create-astro-template-znu": "./bin/create-astro-template-znu.js"
+    "create-astro-starter": "./create/index.js"
   },
-  "description": "Custom project template",
-  "keywords": ["template", "cli", "starter"],
-  "license": "MIT",
-  "dependencies": {
-    "@astrojs/node": "^9.2.0",
-    "@tailwindcss/vite": "^4.1.4",
-    "astro": "^5.7.11",
-    "create-create-app": "^7.3.0",
-    "flowbite": "^3.1.2",
-    "tailwindcss": "^4.1.4"
-  },
-  "devDependencies": {
-    "@types/node": "^22.14.1"
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "bin/",
-    "template/"
-  ]
+    "create",
+    "templates",
+    "i18n",
+    "src",
+    "public",
+    "utils",
+    "astro.config.mjs",
+    "package.json",
+    "template.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "create-create-app": "^7.3.0",
+    "lodash.get": "^4.4.2",
+    "yargs-interactive": "^3.0.0"
+  },
+  "devDependencies": {
+    "astro": "^4.12.2",
+    "zustand": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuramiD/astro-starter-template.git"
+  },
+  "keywords": [
+    "astro",
+    "template",
+    "starter",
+    "i18n",
+    "zustand"
+  ],
+  "author": "Denis Guram",
+  "license": "MIT"
 }
