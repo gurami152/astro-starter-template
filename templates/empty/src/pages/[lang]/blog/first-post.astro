@@ -1,0 +1,177 @@
+---
+import BlogLayout from '@/layouts/content/BlogLayout.astro';
+import { getI18n, LANGUAGES } from '@utils/i18n';
+
+export async function getStaticPaths() {
+	return LANGUAGES.map(lang => ({ params: { lang } }));
+}
+
+const { lang, t } = getI18n(Astro.params.lang);
+
+const publishDate = new Date('2024-01-15');
+---
+
+<BlogLayout 
+  title="Getting Started with Astro: A Complete Guide"
+  description="Learn how to build modern web applications with Astro, from setup to deployment."
+  publishDate={publishDate}
+  author="John Doe"
+  tags={["astro", "web development", "tutorial", "javascript"]}
+>
+  <p>
+    Astro is a modern static site generator that allows you to build fast, content-focused websites. 
+    In this comprehensive guide, we'll explore how to get started with Astro and build your first project.
+  </p>
+
+  <h2>What is Astro?</h2>
+  
+  <p>
+    Astro is a web framework designed for content-driven websites. It provides a powerful and flexible 
+    way to build websites that are fast by default. Astro allows you to use your favorite UI components 
+    and JavaScript frameworks, but ships zero JavaScript by default.
+  </p>
+
+  <h2>Key Features</h2>
+
+  <ul>
+    <li><strong>Zero JavaScript by default:</strong> Astro ships zero JavaScript to the browser by default.</li>
+    <li><strong>Component Islands:</strong> Use any UI component from any framework (React, Vue, Svelte, etc.).</li>
+    <li><strong>Content Collections:</strong> Type-safe content management with built-in validation.</li>
+    <li><strong>Fast by default:</strong> Astro sites are fast out of the box with no configuration needed.</li>
+    <li><strong>Flexible deployment:</strong> Deploy anywhere - static hosting, serverless, or traditional servers.</li>
+  </ul>
+
+  <h2>Getting Started</h2>
+
+  <p>
+    To create a new Astro project, you can use the following command:
+  </p>
+
+  <pre><code>npm create astro@latest my-project</code></pre>
+
+  <p>
+    This will create a new Astro project with all the necessary files and dependencies. 
+    You can then navigate to your project directory and start the development server:
+  </p>
+
+  <pre><code>cd my-project
+npm run dev</code></pre>
+
+  <h2>Project Structure</h2>
+
+  <p>
+    A typical Astro project has the following structure:
+  </p>
+
+  <pre><code>my-project/
+├── public/
+├── src/
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   └── styles/
+├── astro.config.mjs
+└── package.json</code></pre>
+
+  <h2>Creating Your First Page</h2>
+
+  <p>
+    In Astro, pages are created by adding files to the <code>src/pages/</code> directory. 
+    Each file becomes a route on your website. For example, <code>src/pages/index.astro</code> 
+    becomes the homepage of your site.
+  </p>
+
+  <p>
+    Here's a simple example of an Astro page:
+  </p>
+
+  <pre><code>{`---
+// Frontmatter goes here
+const title = "Hello, Astro!";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <h1>{title}</h1>
+    <p>Welcome to my Astro site!</p>
+  </body>
+</html>`}</code></pre>
+
+  <h2>Using Components</h2>
+
+  <p>
+    Astro components are similar to other component frameworks, but they use a <code>.astro</code> 
+    file extension. Components can be imported and used in your pages:
+  </p>
+
+  <pre><code>{`---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>Welcome to my page!</h1>
+    </main>
+    <Footer />
+  </body>
+</html>`}</code></pre>
+
+  <h2>Styling</h2>
+
+  <p>
+    Astro supports multiple styling approaches:
+  </p>
+
+  <ul>
+    <li><strong>CSS Modules:</strong> Scoped CSS with automatic class name generation</li>
+    <li><strong>Tailwind CSS:</strong> Utility-first CSS framework</li>
+    <li><strong>Scoped Styles:</strong> Component-scoped CSS</li>
+    <li><strong>Global Styles:</strong> Site-wide CSS</li>
+  </ul>
+
+  <h2>Deployment</h2>
+
+  <p>
+    Astro sites can be deployed to any static hosting service. Popular options include:
+  </p>
+
+  <ul>
+    <li>Netlify</li>
+    <li>Vercel</li>
+    <li>GitHub Pages</li>
+    <li>Cloudflare Pages</li>
+  </ul>
+
+  <p>
+    To build your site for production, run:
+  </p>
+
+  <pre><code>npm run build</code></pre>
+
+  <h2>Conclusion</h2>
+
+  <p>
+    Astro is a powerful and flexible framework for building modern websites. Its focus on content 
+    and performance makes it an excellent choice for blogs, documentation sites, and other 
+    content-driven applications.
+  </p>
+
+  <p>
+    In the next post, we'll explore more advanced features like content collections, 
+    dynamic routing, and API integration.
+  </p>
+
+  <blockquote>
+    "Astro is the web framework for content-driven websites. Build faster websites with less client-side JavaScript."
+  </blockquote>
+</BlogLayout>

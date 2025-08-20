@@ -1,0 +1,98 @@
+---
+import PageLayout from '@/layouts/content/PageLayout.astro';
+import Card from '@/components/base/Card.astro';
+import Button from '@/components/base/Button.astro';
+import { getI18n, LANGUAGES } from '@utils/i18n';
+
+export async function getStaticPaths() {
+	return LANGUAGES.map(lang => ({ params: { lang } }));
+}
+
+const { lang, t } = getI18n(Astro.params.lang);
+---
+
+<PageLayout 
+  title="About Us" 
+  description="Learn more about our team and mission"
+  showBreadcrumbs={true}
+>
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+        About Our Team
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        We are passionate about creating modern web experiences with cutting-edge technologies.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <Card>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Our Mission
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+          To provide developers with the best tools and templates for building modern web applications.
+        </p>
+        <Button href={`/${lang}/contact`} variant="primary">
+          Get in Touch
+        </Button>
+      </Card>
+
+      <Card>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Our Vision
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+          To make web development faster, easier, and more enjoyable for everyone.
+        </p>
+        <Button href="https://github.com" variant="outline">
+          View on GitHub
+        </Button>
+      </Card>
+    </div>
+
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+        Our Values
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">🚀</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Innovation
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Always exploring new technologies and approaches.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">🤝</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Collaboration
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Working together to create amazing experiences.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">💡</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Quality
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Delivering the best possible solutions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</PageLayout>

@@ -1,7 +1,7 @@
 {
   "name": "create-astro-starter-template-znu",
   "type": "commonjs",
-  "version": "1.0.28",
+  "version": "1.2.1",
   "description": "This is an advanced Astro starter template with built-in features like i18n, Zustand for state management, and a modular structure. It's designed to help you quickly start new projects with a solid foundation.",
   "main": "index.js",
   "bin": {

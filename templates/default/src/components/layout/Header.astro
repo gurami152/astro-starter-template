@@ -1,0 +1,43 @@
+---
+import Logo from "../base/Logo.astro";
+import LangSwitcher from "../widgets/LangSwitcher.astro";
+import ToggleTheme from "../widgets/ToggleTheme.astro";
+import { getI18n } from "@utils/i18n";
+
+const { lang } = getI18n(Astro.params.lang);
+---
+
+<header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 dark:bg-gray-900/95 dark:border-gray-700 shadow-sm">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <div class="flex items-center">
+        <Logo />
+      </div>
+      
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href={`/${lang}`} class="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
+          Home
+        </a>
+        <a href={`/${lang}/about`} class="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
+          About
+        </a>
+        <a href={`/${lang}/blog/first-post`} class="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
+          Blog
+        </a>
+        <a href={`/${lang}/contact`} class="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
+          Contact
+        </a>
+      </nav>
+      
+      <div class="flex items-center space-x-4">
+        <ToggleTheme />
+        <LangSwitcher />
+        <button class="md:hidden p-2 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
