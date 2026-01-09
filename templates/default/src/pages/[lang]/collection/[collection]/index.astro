@@ -1,7 +1,139 @@
 ---
-import Layout from "../../../../layouts/Layout.astro";
+/**
+ * Collection Page
+ * 
+ * Сторінка для відображення колекції через BFF шар.
+ * Демонструє правильний підхід до роботи з даними через BFF.
+ */
+
+import BaseLayout from '@/layouts/base/BaseLayout.astro';
+import Container from '@/components/base/Container.astro';
+import Card from '@/components/base/Card.astro';
+import { fetchCollection } from '@/bff/client';
+
+const { collection } = Astro.params;
+const { searchParams } = Astro.url;
+
+// Отримуємо параметри пагінації з URL
+const page = parseInt(searchParams.get('page') || '1', 10);
+const limit = parseInt(searchParams.get('limit') || '10', 10);
+
+// Отримуємо дані через BFF
+const result = await fetchCollection(collection || 'posts', {
+  page,
+  limit,
+  sortBy: 'date',
+  order: 'desc',
+});
+
+const collectionData = result.success ? result.data : null;
+const error = result.success ? null : result.error;
 ---
 
-<Layout>
-    <h1 class="text-3xl text-center">collection/collection</h1>
-</Layout>
+<BaseLayout
+  title={`Колекція: ${collection}`}
+  description={`Перегляд колекції ${collection}`}
+>
+  <Container>
+    <div class="py-12 space-y-8">
+      <!-- Header -->
+      <div class="space-y-2">
+        <h1 class="text-4xl font-bold">
+          {collectionData ? collectionData.name : collection}
+        </h1>
+        {collectionData && (
+          <p class="text-gray-600 dark:text-gray-400">
+            Всього елементів: {collectionData.totalItems} | Оновлено: {collectionData.updatedAt}
+          </p>
+        )}
+      </div>
+
+      <!-- Error Display -->
+      {error && (
+        <Card>
+          <div class="text-red-600 p-4">
+            <h2 class="font-bold text-lg mb-2">Помилка: {error.code}</h2>
+            <p>{error.userMessage}</p>
+          </div>
+        </Card>
+      )}
+
+      <!-- Collection Items -->
+      {collectionData && (
+        <div class="space-y-6">
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {collectionData.items.map((item) => (
+              <Card>
+                <div class="space-y-3">
+                  <h2 class="text-xl font-bold">{item.title}</h2>
+                  
+                  {item.excerpt && (
+                    <p class="text-gray-600 dark:text-gray-400 line-clamp-3">
+                      {item.excerpt}
+                    </p>
+                  )}
+
+                  <div class="flex flex-col gap-2 text-sm">
+                    {item.author && (
+                      <div class="text-gray-500">
+                        <span class="font-semibold">Автор:</span> {item.author}
+                      </div>
+                    )}
+                    {item.publishedDate && (
+                      <div class="text-gray-500">
+                        <span class="font-semibold">Дата:</span> {item.publishedDate}
+                      </div>
+                    )}
+                  </div>
+
+                  {item.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                      {item.tags.map((tag) => (
+                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full text-xs">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <!-- Pagination -->
+          {collectionData.pagination && (
+            <div class="flex justify-center items-center gap-4">
+              {collectionData.pagination.hasPrev && (
+                <a
+                  href={`?page=${collectionData.pagination.currentPage - 1}&limit=${limit}`}
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  ← Попередня
+                </a>
+              )}
+              
+              <span class="text-gray-600 dark:text-gray-400">
+                Сторінка {collectionData.pagination.currentPage} з {collectionData.pagination.totalPages}
+              </span>
+              
+              {collectionData.pagination.hasNext && (
+                <a
+                  href={`?page=${collectionData.pagination.currentPage + 1}&limit=${limit}`}
+                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  Наступна →
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {!error && !collectionData && (
+        <Card>
+          <p class="text-center text-gray-500 py-8">Немає даних для відображення</p>
+        </Card>
+      )}
+    </div>
+  </Container>
+</BaseLayout>

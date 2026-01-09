@@ -1,0 +1,305 @@
+---
+/**
+ * BFF Demo Page
+ * 
+ * Демонстрація використання BFF шару у Astro компонентах.
+ * Ця сторінка показує як правильно взаємодіяти з бекендом через BFF.
+ */
+
+import BaseLayout from '@/layouts/base/BaseLayout.astro';
+import Container from '@/components/base/Container.astro';
+import Card from '@/components/base/Card.astro';
+import Button from '@/components/base/Button.astro';
+import { fetchCollection, fetchMultipleCollections } from '@/bff/client';
+
+// Отримуємо дані через BFF (SSR)
+const singleCollectionResult = await fetchCollection('posts', {
+  page: 1,
+  limit: 5,
+  sortBy: 'date',
+  order: 'desc',
+});
+
+// Отримуємо кілька колекцій одночасно (агрегація)
+const multipleCollectionsResult = await fetchMultipleCollections(['posts', 'products']);
+
+const posts = singleCollectionResult.success ? singleCollectionResult.data : null;
+const postsError = singleCollectionResult.success ? null : singleCollectionResult.error;
+
+const collections = multipleCollectionsResult.success ? multipleCollectionsResult.data : null;
+const collectionsError = multipleCollectionsResult.success ? null : multipleCollectionsResult.error;
+---
+
+<BaseLayout
+  title="BFF Demo"
+  description="Демонстрація Backend for Frontend шару"
+>
+  <Container>
+    <div class="py-12 space-y-12">
+      <!-- Header -->
+      <div class="text-center space-y-4">
+        <h1 class="text-4xl font-bold">BFF Demo</h1>
+        <p class="text-xl text-gray-600 dark:text-gray-400">
+          Демонстрація Backend for Frontend шару
+        </p>
+      </div>
+
+      <!-- Section 1: Single Collection -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold mb-2">Отримання однієї колекції</h2>
+          <p class="text-gray-600 dark:text-gray-400">
+            Приклад отримання колекції через BFF з пагінацією та сортуванням
+          </p>
+        </div>
+
+        {postsError ? (
+          <Card>
+            <div class="text-red-600 p-4">
+              <h3 class="font-bold text-lg mb-2">Помилка: {postsError.code}</h3>
+              <p>{postsError.userMessage}</p>
+              <p class="text-sm mt-2 text-gray-500">{postsError.message}</p>
+            </div>
+          </Card>
+        ) : posts ? (
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold">Колекція: {posts.name}</p>
+                <p class="text-sm text-gray-600">Всього елементів: {posts.totalItems}</p>
+                <p class="text-sm text-gray-600">Оновлено: {posts.updatedAt}</p>
+              </div>
+              {posts.pagination && (
+                <div class="text-sm">
+                  <p>Сторінка {posts.pagination.currentPage} з {posts.pagination.totalPages}</p>
+                </div>
+              )}
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              {posts.items.map((post) => (
+                <Card>
+                  <div class="space-y-2">
+                    <h3 class="font-bold text-lg">{post.title}</h3>
+                    {post.excerpt && (
+                      <p class="text-gray-600 dark:text-gray-400">{post.excerpt}</p>
+                    )}
+                    <div class="flex justify-between items-center text-sm">
+                      {post.author && (
+                        <span class="text-gray-500">Автор: {post.author}</span>
+                      )}
+                      {post.publishedDate && (
+                        <span class="text-gray-500">{post.publishedDate}</span>
+                      )}
+                    </div>
+                    {post.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                          <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded text-xs">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Card>
+            <p class="text-center text-gray-500">Немає даних</p>
+          </Card>
+        )}
+      </section>
+
+      <!-- Section 2: Multiple Collections (Aggregation) -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold mb-2">Агрегація кількох колекцій</h2>
+          <p class="text-gray-600 dark:text-gray-400">
+            Приклад отримання кількох колекцій одним запитом через BFF
+          </p>
+        </div>
+
+        {collectionsError ? (
+          <Card>
+            <div class="text-red-600 p-4">
+              <h3 class="font-bold text-lg mb-2">Помилка: {collectionsError.code}</h3>
+              <p>{collectionsError.userMessage}</p>
+            </div>
+          </Card>
+        ) : collections ? (
+          <div class="grid gap-6 md:grid-cols-2">
+            {Object.entries(collections).map(([name, collection]) => (
+              <Card>
+                <div class="space-y-4">
+                  <div>
+                    <h3 class="text-xl font-bold">{collection.name}</h3>
+                    <p class="text-sm text-gray-600">
+                      {collection.totalItems} елементів
+                    </p>
+                  </div>
+                  <ul class="space-y-2">
+                    {collection.items.slice(0, 3).map((item) => (
+                      <li class="border-l-2 border-blue-500 pl-3">
+                        <p class="font-medium">{item.title}</p>
+                        {item.publishedDate && (
+                          <p class="text-xs text-gray-500">{item.publishedDate}</p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  {collection.items.length > 3 && (
+                    <p class="text-sm text-gray-500">
+                      та ще {collection.items.length - 3} елементів...
+                    </p>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : null}
+      </section>
+
+      <!-- Section 3: Client-side Example -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold mb-2">Клієнтський запит</h2>
+          <p class="text-gray-600 dark:text-gray-400">
+            Приклад використання BFF з клієнтського JavaScript
+          </p>
+        </div>
+
+        <Card>
+          <div class="space-y-4">
+            <div id="search-section" class="space-y-3">
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Введіть пошуковий запит..."
+                  class="flex-1 px-4 py-2 border rounded-lg dark:bg-gray-800 dark:border-gray-700"
+                />
+                <Button id="search-button">Пошук</Button>
+              </div>
+              <div id="search-results" class="space-y-2"></div>
+            </div>
+          </div>
+        </Card>
+      </section>
+
+      <!-- Section 4: BFF Benefits -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-bold mb-2">Переваги BFF</h2>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">🔄 Агрегація</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Об'єднання даних з кількох API в один запит
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">🔧 Трансформація</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Адаптація даних під потреби UI (форматування, обчислення)
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">🔒 Безпека</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Приховування API токенів та внутрішньої структури
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">⚡ Кешування</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Централізоване кешування на рівні BFF
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">🛡️ Обробка помилок</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Єдиний підхід до обробки та форматування помилок
+              </p>
+            </div>
+          </Card>
+
+          <Card>
+            <div class="space-y-2">
+              <h3 class="font-bold text-lg">🔌 Відв'язка</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                UI не залежить від структури бекенд API
+              </p>
+            </div>
+          </Card>
+        </div>
+      </section>
+    </div>
+  </Container>
+</BaseLayout>
+
+<script>
+  // Клієнтський код для пошуку
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchButton = document.getElementById('search-button');
+  const searchResults = document.getElementById('search-results');
+
+  searchButton?.addEventListener('click', async () => {
+    const query = searchInput?.value.trim();
+    if (!query || !searchResults) return;
+
+    searchResults.innerHTML = '<p class="text-gray-500">Завантаження...</p>';
+
+    try {
+      const response = await fetch(
+        `/api/bff/collections/search?collection=posts&q=${encodeURIComponent(query)}`
+      );
+      const result = await response.json();
+
+      if (result.success && result.data.items.length > 0) {
+        searchResults.innerHTML = result.data.items
+          .map(
+            (item: any) => `
+            <div class="p-3 border rounded-lg dark:border-gray-700">
+              <p class="font-medium">${item.title}</p>
+              ${item.excerpt ? `<p class="text-sm text-gray-600 dark:text-gray-400">${item.excerpt}</p>` : ''}
+            </div>
+          `
+          )
+          .join('');
+      } else if (result.success) {
+        searchResults.innerHTML = '<p class="text-gray-500">Нічого не знайдено</p>';
+      } else {
+        searchResults.innerHTML = `<p class="text-red-600">${result.error.userMessage}</p>`;
+      }
+    } catch (error) {
+      searchResults.innerHTML =
+        '<p class="text-red-600">Помилка при виконанні пошуку</p>';
+    }
+  });
+
+  // Пошук по Enter
+  searchInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      searchButton?.click();
+    }
+  });
+</script>
+
