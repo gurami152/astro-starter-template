@@ -1,26 +1,29 @@
 /**
  * Collection Service
- * 
+ *
  * Сервіс для роботи з колекціями.
  * Orchestration: викликає API, агрегує дані, застосовує трансформери.
  */
 
-import { createApiClient } from '../http/api-client';
-import { transformCollection, filterAndSortCollectionItems } from '../transformers';
-import { transformError, logError } from '../transformers/error.transformer';
+import { createApiClient } from "../http/api-client";
+import {
+  transformCollection,
+  filterAndSortCollectionItems,
+} from "../transformers";
+import { transformError, logError } from "../transformers/error.transformer";
 import type {
   ApiCollectionResponse,
   CollectionDTO,
   CollectionQueryParams,
   BFFResponse,
-} from '../types';
+} from "../types";
 
 /**
  * Отримує колекцію з бекенд API
  */
 export async function getCollection(
   collectionName: string,
-  params?: CollectionQueryParams
+  params?: CollectionQueryParams,
 ): Promise<BFFResponse<CollectionDTO>> {
   try {
     const startTime = Date.now();
@@ -28,11 +31,11 @@ export async function getCollection(
 
     // Будуємо query string для пагінації
     const queryParams = new URLSearchParams();
-    if (params?.page) queryParams.set('page', String(params.page));
-    if (params?.limit) queryParams.set('limit', String(params.limit));
+    if (params?.page) queryParams.set("page", String(params.page));
+    if (params?.limit) queryParams.set("limit", String(params.limit));
 
     const queryString = queryParams.toString();
-    const path = `/collections/${collectionName}${queryString ? `?${queryString}` : ''}`;
+    const path = `/collections/${collectionName}${queryString ? `?${queryString}` : ""}`;
 
     // Запит до API
     const apiResponse = await apiClient.get<ApiCollectionResponse>(path);
@@ -74,13 +77,13 @@ export async function getCollection(
  * Отримує кілька колекцій одночасно (агрегація)
  */
 export async function getMultipleCollections(
-  collectionNames: string[]
+  collectionNames: string[],
 ): Promise<BFFResponse<Record<string, CollectionDTO>>> {
   try {
     const startTime = Date.now();
 
     // Паралельні запити до API
-    const promises = collectionNames.map(name => getCollection(name));
+    const promises = collectionNames.map((name) => getCollection(name));
     const results = await Promise.all(promises);
 
     // Збираємо результати
@@ -97,7 +100,7 @@ export async function getMultipleCollections(
 
     // Якщо всі запити завершились помилкою
     if (Object.keys(collections).length === 0) {
-      throw new Error(`Failed to fetch collections: ${errors.join(', ')}`);
+      throw new Error(`Failed to fetch collections: ${errors.join(", ")}`);
     }
 
     const duration = Date.now() - startTime;
@@ -111,7 +114,7 @@ export async function getMultipleCollections(
       },
     };
   } catch (error) {
-    logError(error, 'getMultipleCollections');
+    logError(error, "getMultipleCollections");
     return transformError(error);
   }
 }
@@ -121,7 +124,7 @@ export async function getMultipleCollections(
  */
 export async function searchCollection(
   collectionName: string,
-  searchQuery: string
+  searchQuery: string,
 ): Promise<BFFResponse<CollectionDTO>> {
   try {
     // Отримуємо всю колекцію
@@ -132,10 +135,13 @@ export async function searchCollection(
     }
 
     // Фільтруємо на рівні BFF
-    const filtered = result.data.items.filter(item =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    const filtered = result.data.items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.tags.some((tag) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
     );
 
     return {
@@ -152,4 +158,3 @@ export async function searchCollection(
     return transformError(error);
   }
 }
-

@@ -94,22 +94,24 @@ SITE=http://localhost:4321
 
 ```astro
 ---
-import { fetchCollection } from '@/bff/client';
+import { fetchCollection } from "@/bff/client";
 
-const result = await fetchCollection('posts');
+const result = await fetchCollection("posts");
 const posts = result.success ? result.data : null;
 ---
 
-{posts && (
-  <div>
-    {posts.items.map(post => (
-      <article>
-        <h2>{post.title}</h2>
-        <p>{post.excerpt}</p>
-      </article>
-    ))}
-  </div>
-)}
+{
+  posts && (
+    <div>
+      {posts.items.map((post) => (
+        <article>
+          <h2>{post.title}</h2>
+          <p>{post.excerpt}</p>
+        </article>
+      ))}
+    </div>
+  )
+}
 ```
 
 3. **Перегляньте демо**: Відкрийте `/bff-demo` після запуску проєкту
@@ -117,6 +119,7 @@ const posts = result.success ? result.data : null;
 ### Документація BFF
 
 Детальну документацію про BFF шар дивіться у:
+
 - **[src/bff/README.md](./src/bff/README.md)** - Повна документація BFF
 - **[ENV.md](./ENV.md)** - Налаштування змінних середовища
 
@@ -124,14 +127,33 @@ const posts = result.success ? result.data : null;
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command                   | Action                                            |
+| :------------------------ | :------------------------------------------------ |
+| `npm install`             | Installs dependencies                             |
+| `npm run dev`             | Starts local dev server at `localhost:4321`       |
+| `npm run build`           | Build your production site to `./dist/`           |
+| `npm run preview`         | Preview your build locally, before deploying      |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check`  |
+| `npm run astro -- --help` | Get help using the Astro CLI                      |
+| `npm run lint`            | Runs ESLint to check for code issues              |
+| `npm run format`          | Runs Prettier to format code and Tailwind classes |
+
+## 🛠 Якість коду
+
+Для підтримки чистоти та єдиного стилю коду в проєкті налаштовані **ESLint** та **Prettier**.
+
+- **ESLint**: Перевіряє код на логічні помилки та дотримання стандартів TypeScript та Astro.
+- **Prettier**: Автоматично виправляє відступи, лапки та сортує Tailwind CSS класи у правильному порядку.
+
+### Як використовувати:
+
+```bash
+# Тільки перевірка
+npm run lint
+
+# Автоматичне виправлення стилю у всьому проєкті
+npm run format
+```
 
 ## 📚 Додаткові ресурси
 
@@ -184,7 +206,7 @@ export async function getProduct(id: string): Promise<BFFResponse<ProductDTO>> {
     const apiClient = createApiClient();
     const apiResponse = await apiClient.get(`/products/${id}`);
     const productDTO = transformProduct(apiResponse);
-    
+
     return { success: true, data: productDTO };
   } catch (error) {
     return transformError(error);
@@ -195,14 +217,14 @@ export async function getProduct(id: string): Promise<BFFResponse<ProductDTO>> {
 ### 4. Створіть endpoint (`src/pages/api/bff/products/[id].ts`)
 
 ```typescript
-import type { APIRoute } from 'astro';
-import { getProduct } from '@/bff/services/product.service';
+import type { APIRoute } from "astro";
+import { getProduct } from "@/bff/services/product.service";
 
 export const GET: APIRoute = async ({ params }) => {
   const result = await getProduct(params.id!);
   return new Response(JSON.stringify(result), {
     status: result.success ? 200 : 500,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   });
 };
 ```
@@ -210,7 +232,9 @@ export const GET: APIRoute = async ({ params }) => {
 ### 5. Додайте клієнтську функцію (`src/bff/client/index.ts`)
 
 ```typescript
-export async function fetchProduct(id: string): Promise<BFFResponse<ProductDTO>> {
+export async function fetchProduct(
+  id: string,
+): Promise<BFFResponse<ProductDTO>> {
   const url = `${getBFFBaseUrl()}/products/${id}`;
   const response = await fetch(url);
   return await response.json();
@@ -221,8 +245,8 @@ export async function fetchProduct(id: string): Promise<BFFResponse<ProductDTO>>
 
 ```astro
 ---
-import { fetchProduct } from '@/bff/client';
-const result = await fetchProduct('123');
+import { fetchProduct } from "@/bff/client";
+const result = await fetchProduct("123");
 ---
 
 {result.success && <div>{result.data.name}</div>}

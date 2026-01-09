@@ -1,11 +1,11 @@
 /**
  * HTTP Client для взаємодії з зовнішніми API
- * 
+ *
  * Цей клієнт інкапсулює всі HTTP запити до бекенд API,
  * обробляє помилки, таймаути та retry логіку.
  */
 
-import type { ApiErrorResponse } from '../types';
+import type { ApiErrorResponse } from "../types";
 
 // ============================================================================
 // Configuration
@@ -33,24 +33,24 @@ export class ApiClientError extends Error {
   constructor(
     message: string,
     public statusCode?: number,
-    public response?: unknown
+    public response?: unknown,
   ) {
     super(message);
-    this.name = 'ApiClientError';
+    this.name = "ApiClientError";
   }
 }
 
 export class TimeoutError extends ApiClientError {
   constructor(message: string) {
     super(message);
-    this.name = 'TimeoutError';
+    this.name = "TimeoutError";
   }
 }
 
 export class NetworkError extends ApiClientError {
   constructor(message: string) {
     super(message);
-    this.name = 'NetworkError';
+    this.name = "NetworkError";
   }
 }
 
@@ -77,7 +77,7 @@ export class ApiClient {
   private async fetchWithTimeout(
     url: string,
     options: RequestInit,
-    timeout: number
+    timeout: number,
   ): Promise<Response> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -91,13 +91,13 @@ export class ApiClient {
       return response;
     } catch (error) {
       clearTimeout(timeoutId);
-      
-      if ((error as Error).name === 'AbortError') {
+
+      if ((error as Error).name === "AbortError") {
         throw new TimeoutError(`Request timeout after ${timeout}ms`);
       }
-      
+
       throw new NetworkError(
-        error instanceof Error ? error.message : 'Network request failed'
+        error instanceof Error ? error.message : "Network request failed",
       );
     }
   }
@@ -109,60 +109,59 @@ export class ApiClient {
     url: string,
     options: RequestInit,
     retries: number,
-    timeout: number
+    timeout: number,
   ): Promise<Response> {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= retries; attempt++) {
       try {
         const response = await this.fetchWithTimeout(url, options, timeout);
-        
+
         // Не повторюємо запити для 4xx помилок (клієнтські помилки)
         if (response.status >= 400 && response.status < 500) {
           return response;
         }
-        
+
         // Якщо успішний запит або 5xx помилка на останній спробі
         if (response.ok || attempt === retries) {
           return response;
         }
-        
+
         // Чекаємо перед наступною спробою для 5xx помилок
         await this.delay(this.config.retryDelay * (attempt + 1));
-        
       } catch (error) {
         lastError = error as Error;
-        
+
         // Якщо це остання спроба, кидаємо помилку
         if (attempt === retries) {
           throw lastError;
         }
-        
+
         // Чекаємо перед наступною спробою
         await this.delay(this.config.retryDelay * (attempt + 1));
       }
     }
 
-    throw lastError || new Error('All retry attempts failed');
+    throw lastError || new Error("All retry attempts failed");
   }
 
   /**
    * Затримка для retry логіки
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
    * Обробляє відповідь від API
    */
   private async handleResponse<T>(response: Response): Promise<T> {
-    const contentType = response.headers.get('content-type');
-    const isJson = contentType?.includes('application/json');
+    const contentType = response.headers.get("content-type");
+    const isJson = contentType?.includes("application/json");
 
     if (!response.ok) {
       let errorData: ApiErrorResponse | undefined;
-      
+
       if (isJson) {
         try {
           errorData = await response.json();
@@ -172,9 +171,10 @@ export class ApiClient {
       }
 
       throw new ApiClientError(
-        errorData?.message || `HTTP Error: ${response.status} ${response.statusText}`,
+        errorData?.message ||
+          `HTTP Error: ${response.status} ${response.statusText}`,
         response.status,
-        errorData
+        errorData,
       );
     }
 
@@ -191,19 +191,20 @@ export class ApiClient {
   async get<T>(path: string, options?: RequestOptions): Promise<T> {
     const url = `${this.config.baseURL}${path}`;
     const timeout = options?.timeout || this.config.timeout;
-    const retries = options?.retries !== undefined ? options.retries : this.config.retries;
-    
+    const retries =
+      options?.retries !== undefined ? options.retries : this.config.retries;
+
     const response = await this.fetchWithRetry(
       url,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
           ...this.config.headers,
           ...options?.headers,
         },
       },
       retries,
-      timeout
+      timeout,
     );
 
     return this.handleResponse<T>(response);
@@ -212,24 +213,29 @@ export class ApiClient {
   /**
    * POST запит
    */
-  async post<T>(path: string, data?: unknown, options?: RequestOptions): Promise<T> {
+  async post<T>(
+    path: string,
+    data?: unknown,
+    options?: RequestOptions,
+  ): Promise<T> {
     const url = `${this.config.baseURL}${path}`;
     const timeout = options?.timeout || this.config.timeout;
-    const retries = options?.retries !== undefined ? options.retries : this.config.retries;
-    
+    const retries =
+      options?.retries !== undefined ? options.retries : this.config.retries;
+
     const response = await this.fetchWithRetry(
       url,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...this.config.headers,
           ...options?.headers,
         },
         body: data ? JSON.stringify(data) : undefined,
       },
       retries,
-      timeout
+      timeout,
     );
 
     return this.handleResponse<T>(response);
@@ -238,24 +244,29 @@ export class ApiClient {
   /**
    * PUT запит
    */
-  async put<T>(path: string, data?: unknown, options?: RequestOptions): Promise<T> {
+  async put<T>(
+    path: string,
+    data?: unknown,
+    options?: RequestOptions,
+  ): Promise<T> {
     const url = `${this.config.baseURL}${path}`;
     const timeout = options?.timeout || this.config.timeout;
-    const retries = options?.retries !== undefined ? options.retries : this.config.retries;
-    
+    const retries =
+      options?.retries !== undefined ? options.retries : this.config.retries;
+
     const response = await this.fetchWithRetry(
       url,
       {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...this.config.headers,
           ...options?.headers,
         },
         body: data ? JSON.stringify(data) : undefined,
       },
       retries,
-      timeout
+      timeout,
     );
 
     return this.handleResponse<T>(response);
@@ -267,19 +278,20 @@ export class ApiClient {
   async delete<T>(path: string, options?: RequestOptions): Promise<T> {
     const url = `${this.config.baseURL}${path}`;
     const timeout = options?.timeout || this.config.timeout;
-    const retries = options?.retries !== undefined ? options.retries : this.config.retries;
-    
+    const retries =
+      options?.retries !== undefined ? options.retries : this.config.retries;
+
     const response = await this.fetchWithRetry(
       url,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           ...this.config.headers,
           ...options?.headers,
         },
       },
       retries,
-      timeout
+      timeout,
     );
 
     return this.handleResponse<T>(response);
@@ -293,13 +305,13 @@ export class ApiClient {
 /**
  * Створює API клієнт з конфігурацією з environment variables
  */
-export function createApiClient(apiName: string = 'MAIN'): ApiClient {
+export function createApiClient(apiName: string = "MAIN"): ApiClient {
   const envKey = `${apiName}_API_URL`;
   const baseURL = import.meta.env[envKey] || import.meta.env.PUBLIC_API_URL;
 
   if (!baseURL) {
     throw new Error(
-      `API URL not configured. Please set ${envKey} or PUBLIC_API_URL environment variable.`
+      `API URL not configured. Please set ${envKey} or PUBLIC_API_URL environment variable.`,
     );
   }
 
@@ -309,8 +321,7 @@ export function createApiClient(apiName: string = 'MAIN'): ApiClient {
     retries: 3,
     retryDelay: 1000,
     headers: {
-      'Accept': 'application/json',
+      Accept: "application/json",
     },
   });
 }
-

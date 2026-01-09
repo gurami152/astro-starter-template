@@ -17,26 +17,41 @@ const {
   image,
   canonical,
   showBreadcrumbs = false,
-  class: className = '',
+  class: className = "",
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={image} canonical={canonical}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  canonical={canonical}
+>
   <Container class={`py-8 md:py-12 ${className}`}>
-    {showBreadcrumbs && (
-      <nav class="mb-8" aria-label="Breadcrumb">
-        <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-          <li><a href="/" class="hover:text-gray-700 dark:hover:text-gray-300">Home</a></li>
-          <li class="flex items-center">
-            <svg class="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 dark:text-gray-300">{title}</span>
-          </li>
-        </ol>
-      </nav>
-    )}
-    
+    {
+      showBreadcrumbs && (
+        <nav class="mb-8" aria-label="Breadcrumb">
+          <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <li>
+              <a href="/" class="hover:text-gray-700 dark:hover:text-gray-300">
+                Home
+              </a>
+            </li>
+            <li class="flex items-center">
+              <svg class="mx-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="text-gray-700 dark:text-gray-300">{title}</span>
+            </li>
+          </ol>
+        </nav>
+      )
+    }
+
     <slot />
   </Container>
 </BaseLayout>

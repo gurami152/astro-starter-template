@@ -12,24 +12,19 @@
 
 - **src/bff/types/** - TypeScript типи та DTO
   - `index.ts` - API типи, DTO типи, Request/Response типи
-  
 - **src/bff/http/** - HTTP клієнти для зовнішніх API
   - `api-client.ts` - HTTP клієнт з timeout, retry, обробкою помилок
-  
 - **src/bff/transformers/** - Трансформація даних
   - `collection.transformer.ts` - Трансформація колекцій
   - `user.transformer.ts` - Трансформація користувачів
   - `error.transformer.ts` - Трансформація помилок
   - `index.ts` - Централізований експорт
-  
 - **src/bff/services/** - Бізнес-логіка та оркестрація
   - `collection.service.ts` - Сервіс для роботи з колекціями
   - `user.service.ts` - Сервіс для роботи з користувачами
   - `index.ts` - Централізований експорт
-  
 - **src/bff/client/** - Клієнт для використання у UI
   - `index.ts` - Функції для викликів BFF endpoints з UI
-  
 - **src/bff/** - Документація
   - `README.md` - Повна документація BFF шару
 
@@ -39,15 +34,11 @@
   - Query params: `page`, `limit`, `tags`, `author`, `sortBy`, `order`
   - Підтримка пагінації
   - Фільтрація та сортування
-  
 - **GET /api/bff/collections/search** - Пошук у колекції
   - Query params: `collection`, `q`
-  
 - **POST /api/bff/collections/aggregate** - Агрегація кількох колекцій
   - Body: `{ collections: string[] }`
-  
 - **GET /api/bff/users/[userId]** - Отримання користувача
-  
 - **GET /api/bff/users/me** - Поточний користувач
   - Header: `Authorization: Bearer {token}`
 
@@ -58,7 +49,6 @@
   - Агрегація даних
   - Client-side пошук
   - Візуалізація переваг BFF
-  
 - **src/pages/[lang]/collection/[collection]/index.astro** - Оновлена сторінка колекції
   - Використання BFF замість прямих API викликів
   - Підтримка пагінації
@@ -71,19 +61,16 @@
   - Швидкий старт
   - Приклади використання
   - Best practices
-  
 - **src/bff/README.md** - Повна документація BFF
   - Що таке BFF
   - Переваги
   - Структура
   - Як додати новий endpoint
   - Приклади
-  
 - **ENV.md** - Документація змінних середовища
   - Налаштування API URLs
   - Різні середовища (dev/prod)
   - Безпека
-  
 - **BFF_ARCHITECTURE.md** - Детальна архітектура
   - Архітектурні шари
   - Потік даних
@@ -91,7 +78,6 @@
   - Performance
   - Security
   - Тестування
-  
 - **BFF_EXAMPLES.md** - Практичні приклади
   - Базові приклади
   - Агрегація даних
@@ -204,15 +190,17 @@
 Якщо у вас є код, що викликає API безпосередньо:
 
 **Було:**
+
 ```typescript
 const response = await fetch(`${API_URL}/collections/posts`);
 const data = await response.json();
 ```
 
 **Стало:**
+
 ```typescript
-import { fetchCollection } from '@/bff/client';
-const result = await fetchCollection('posts');
+import { fetchCollection } from "@/bff/client";
+const result = await fetchCollection("posts");
 const data = result.success ? result.data : null;
 ```
 
@@ -246,4 +234,3 @@ const data = result.success ? result.data : null;
 ### Ліцензія
 
 Відповідає ліцензії основного проєкту.
-

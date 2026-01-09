@@ -1,6 +1,6 @@
 ---
 export interface Props {
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  type?: "text" | "email" | "password" | "number" | "tel" | "url";
   placeholder?: string;
   value?: string;
   required?: boolean;
@@ -12,39 +12,37 @@ export interface Props {
 }
 
 const {
-  type = 'text',
-  placeholder = '',
-  value = '',
+  type = "text",
+  placeholder = "",
+  value = "",
   required = false,
   disabled = false,
   error = false,
   id,
   name,
-  class: className = '',
+  class: className = "",
 } = Astro.props;
 
-const baseClasses = 'block w-full rounded-lg border px-3 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+const baseClasses =
+  "block w-full rounded-lg border px-3 py-2 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
 
-const stateClasses = error 
-  ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500 dark:border-red-600 dark:text-red-100 dark:placeholder-red-400'
-  : 'border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 dark:bg-gray-700';
+const stateClasses = error
+  ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500 dark:border-red-600 dark:text-red-100 dark:placeholder-red-400"
+  : "border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 dark:bg-gray-700";
 
-const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
+const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
 
-const classes = [
-  baseClasses,
-  stateClasses,
-  disabledClasses,
-  className,
-].filter(Boolean).join(' ');
+const classes = [baseClasses, stateClasses, disabledClasses, className]
+  .filter(Boolean)
+  .join(" ");
 ---
 
-<input 
-  type={type} 
-  placeholder={placeholder} 
-  value={value} 
-  required={required} 
-  disabled={disabled} 
+<input
+  type={type}
+  placeholder={placeholder}
+  value={value}
+  required={required}
+  disabled={disabled}
   id={id}
   name={name}
   class={classes}

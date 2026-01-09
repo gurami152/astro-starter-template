@@ -5,89 +5,102 @@ const { lang } = getI18n(Astro.params.lang);
 const { pathname } = Astro.url;
 
 // Видаляємо поточний мовний префікс зі шляху
-const pathWithoutLang = pathname.startsWith(`/${lang}`) ? pathname.replace(`/${lang}`, '') || '/' : pathname;
-
+const pathWithoutLang = pathname.startsWith(`/${lang}`)
+  ? pathname.replace(`/${lang}`, "") || "/"
+  : pathname;
 ---
+
 <div class="relative">
-  <button 
-    id="lang-dropdown-button" 
-    class="flex items-center justify-center p-2 text-sm font-medium text-gray-900 rounded-full cursor-pointer bg-gray-100 hover:bg-gray-200 dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors duration-200" 
+  <button
+    id="lang-dropdown-button"
+    class="flex cursor-pointer items-center justify-center rounded-full bg-gray-100 p-2 text-sm font-medium text-gray-900 transition-colors duration-200 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
     type="button"
     aria-expanded="false"
     aria-haspopup="true"
   >
     {lang.toUpperCase()}
-    <svg class="w-4 h-4 ml-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    <svg
+      class="ml-2 h-4 w-4 transition-transform duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"></path>
     </svg>
   </button>
 
   <!-- Dropdown -->
-  <div 
-    id="lang-dropdown-menu" 
-    class="absolute right-0 mt-2 z-50 hidden min-w-[120px] bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-700 dark:border-gray-600"
+  <div
+    id="lang-dropdown-menu"
+    class="absolute right-0 z-50 mt-2 hidden min-w-[120px] rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
   >
     <ul class="py-1" role="menu">
-      {LANGUAGES.map(languageCode => (
-        <li role="none">
-          <a 
-            href={`/${languageCode}${pathWithoutLang}`} 
-            class:list={[
-              "block px-4 py-2 text-sm transition-colors duration-150",
-              lang === languageCode 
-                ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-gray-600" 
-                : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-            ]}
-            role="menuitem"
-          >
-            {languageCode.toUpperCase()}
-          </a>
-        </li>
-      ))}
+      {
+        LANGUAGES.map((languageCode) => (
+          <li role="none">
+            <a
+              href={`/${languageCode}${pathWithoutLang}`}
+              class:list={[
+                "block px-4 py-2 text-sm transition-colors duration-150",
+                lang === languageCode
+                  ? "bg-blue-50 text-blue-600 dark:bg-gray-600 dark:text-blue-400"
+                  : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white",
+              ]}
+              role="menuitem"
+            >
+              {languageCode.toUpperCase()}
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('lang-dropdown-button');
-    const menu = document.getElementById('lang-dropdown-menu');
-    const arrow = button?.querySelector('svg');
+  document.addEventListener("DOMContentLoaded", function () {
+    const button = document.getElementById("lang-dropdown-button");
+    const menu = document.getElementById("lang-dropdown-menu");
+    const arrow = button?.querySelector("svg");
 
     if (!button || !menu || !arrow) return;
 
     // Toggle dropdown
-    button.addEventListener('click', function(e) {
+    button.addEventListener("click", function (e) {
       e.stopPropagation();
-      const isOpen = menu.classList.contains('hidden');
-      
+      const isOpen = menu.classList.contains("hidden");
+
       if (isOpen) {
-        menu.classList.remove('hidden');
-        button.setAttribute('aria-expanded', 'true');
-        arrow.style.transform = 'rotate(180deg)';
+        menu.classList.remove("hidden");
+        button.setAttribute("aria-expanded", "true");
+        arrow.style.transform = "rotate(180deg)";
       } else {
-        menu.classList.add('hidden');
-        button.setAttribute('aria-expanded', 'false');
-        arrow.style.transform = 'rotate(0deg)';
+        menu.classList.add("hidden");
+        button.setAttribute("aria-expanded", "false");
+        arrow.style.transform = "rotate(0deg)";
       }
     });
 
     // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener("click", function (e) {
       const target = e.target as Node;
       if (!button.contains(target) && !menu.contains(target)) {
-        menu.classList.add('hidden');
-        button.setAttribute('aria-expanded', 'false');
-        arrow.style.transform = 'rotate(0deg)';
+        menu.classList.add("hidden");
+        button.setAttribute("aria-expanded", "false");
+        arrow.style.transform = "rotate(0deg)";
       }
     });
 
     // Close dropdown on escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
-        menu.classList.add('hidden');
-        button.setAttribute('aria-expanded', 'false');
-        arrow.style.transform = 'rotate(0deg)';
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !menu.classList.contains("hidden")) {
+        menu.classList.add("hidden");
+        button.setAttribute("aria-expanded", "false");
+        arrow.style.transform = "rotate(0deg)";
       }
     });
   });

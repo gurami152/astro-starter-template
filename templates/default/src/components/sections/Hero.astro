@@ -13,45 +13,49 @@ export interface Props {
 
 const {
   title,
-  subtitle = '',
-  ctaText = 'Get Started',
-  ctaLink = '#',
-  image = '',
-  class: className = '',
+  subtitle = "",
+  ctaText = "Get Started",
+  ctaLink = "#",
+  image = "",
+  class: className = "",
 } = Astro.props;
 ---
 
 <section class={`py-16 md:py-24 bg-white dark:bg-gray-900 ${className}`}>
   <Container>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
       <div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+        <h1
+          class="text-4xl leading-tight font-bold text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        >
           {title}
         </h1>
-        {subtitle && (
-          <p class="mt-6 text-xl text-gray-600 dark:text-gray-300">
-            {subtitle}
-          </p>
-        )}
-        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+        {
+          subtitle && (
+            <p class="mt-6 text-xl text-gray-600 dark:text-gray-300">
+              {subtitle}
+            </p>
+          )
+        }
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row">
           <Button href={ctaLink} size="lg">
             {ctaText}
           </Button>
-          <Button variant="outline" size="lg">
-            Learn More
-          </Button>
+          <Button variant="outline" size="lg"> Learn More </Button>
         </div>
       </div>
-      
-      {image && (
-        <div class="relative">
-          <img 
-            src={image} 
-            alt={title} 
-            class="w-full h-auto rounded-lg shadow-lg"
-          />
-        </div>
-      )}
+
+      {
+        image && (
+          <div class="relative">
+            <img
+              src={image}
+              alt={title}
+              class="h-auto w-full rounded-lg shadow-lg"
+            />
+          </div>
+        )
+      }
     </div>
   </Container>
 </section>

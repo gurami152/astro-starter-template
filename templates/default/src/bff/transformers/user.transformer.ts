@@ -1,17 +1,17 @@
 /**
  * User Transformers
- * 
+ *
  * Трансформери для користувацьких даних
  */
 
-import type { ApiUserResponse, UserDTO } from '../types';
+import type { ApiUserResponse, UserDTO } from "../types";
 
 /**
  * Створює display name з firstName, lastName або username
  */
 function createDisplayName(user: ApiUserResponse): string {
   if (user.firstName || user.lastName) {
-    return [user.firstName, user.lastName].filter(Boolean).join(' ');
+    return [user.firstName, user.lastName].filter(Boolean).join(" ");
   }
   return user.username;
 }
@@ -21,9 +21,9 @@ function createDisplayName(user: ApiUserResponse): string {
  */
 function formatMemberSince(dateString: string): string {
   const date = new Date(dateString);
-  return date.toLocaleDateString('uk-UA', {
-    year: 'numeric',
-    month: 'long',
+  return date.toLocaleDateString("uk-UA", {
+    year: "numeric",
+    month: "long",
   });
 }
 
@@ -37,7 +37,7 @@ export function transformUser(apiUser: ApiUserResponse): UserDTO {
     displayName: createDisplayName(apiUser),
     email: apiUser.email,
     avatarUrl: apiUser.avatar,
-    isAdmin: apiUser.role === 'admin',
+    isAdmin: apiUser.role === "admin",
     memberSince: formatMemberSince(apiUser.createdAt),
   };
 }
@@ -48,4 +48,3 @@ export function transformUser(apiUser: ApiUserResponse): UserDTO {
 export function transformUsers(apiUsers: ApiUserResponse[]): UserDTO[] {
   return apiUsers.map(transformUser);
 }
-

@@ -1,5 +1,5 @@
-import type { APIRoute } from 'astro';
-import redis from '@utils/redis'; // Імпортуємо наш Redis-клієнт
+import type { APIRoute } from "astro";
+import redis from "@utils/redis"; // Імпортуємо наш Redis-клієнт
 
 /**
  * Example API Route to fetch collection data.
@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ params }) => {
   const { collection } = params;
 
   if (!collection) {
-    return new Response('Collection parameter is missing', { status: 400 });
+    return new Response("Collection parameter is missing", { status: 400 });
   }
 
   const cacheKey = `collection:${collection}`;
@@ -27,20 +27,20 @@ export const GET: APIRoute = async ({ params }) => {
       return new Response(cachedData, {
         status: 200,
         headers: {
-          'Content-Type': 'application/json',
-          'X-Cache-Status': 'HIT',
+          "Content-Type": "application/json",
+          "X-Cache-Status": "HIT",
         },
       });
     }
   } catch (error) {
-    console.error('Redis GET error:', error);
+    console.error("Redis GET error:", error);
     // Якщо Redis недоступний, ми можемо продовжити і отримати свіжі дані,
     // замість того, щоб повертати помилку.
   }
-  
+
   // 2. Якщо в кеші немає, робимо запит до API (зараз це мок)
   console.log(`Fetching new data for: ${cacheKey}`);
-  
+
   const mockData = {
     collection: collection,
     items: [
@@ -57,14 +57,14 @@ export const GET: APIRoute = async ({ params }) => {
   try {
     await redis.setex(cacheKey, CACHE_TTL_SECONDS, dataString);
   } catch (error) {
-    console.error('Redis SETEX error:', error);
+    console.error("Redis SETEX error:", error);
   }
-  
+
   return new Response(dataString, {
     status: 200,
     headers: {
-      'Content-Type': 'application/json',
-      'X-Cache-Status': 'MISS',
+      "Content-Type": "application/json",
+      "X-Cache-Status": "MISS",
     },
   });
-}; 
+};
