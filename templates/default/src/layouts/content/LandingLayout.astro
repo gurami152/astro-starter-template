@@ -14,11 +14,16 @@ const {
   description,
   image,
   canonical,
-  class: className = '',
+  class: className = "",
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={image} canonical={canonical}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  canonical={canonical}
+>
   <div class={className}>
     <slot />
   </div>

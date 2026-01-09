@@ -31,6 +31,7 @@ SITE=http://localhost:4321
 Основний URL бекенд API, до якого звертається BFF.
 
 **Приклад:**
+
 ```env
 PUBLIC_API_URL=https://api.example.com
 ```
@@ -48,10 +49,10 @@ AUTH_API_URL=https://auth.example.com
 У коді використовуйте:
 
 ```typescript
-import { createApiClient } from '@/bff/http/api-client';
+import { createApiClient } from "@/bff/http/api-client";
 
-const mainClient = createApiClient('MAIN');
-const analyticsClient = createApiClient('ANALYTICS');
+const mainClient = createApiClient("MAIN");
+const analyticsClient = createApiClient("ANALYTICS");
 ```
 
 ### SITE
@@ -101,6 +102,7 @@ npm run dev
 ```
 
 Якщо BFF не може підключитися до API, ви побачите помилку:
+
 ```
 Error: API URL not configured. Please set PUBLIC_API_URL environment variable.
 ```
@@ -123,4 +125,3 @@ json-server --watch db.json --port 3000
 ```env
 PUBLIC_API_URL=http://localhost:3000
 ```
-

@@ -29,6 +29,7 @@ npm run dev
 ### Крок 4: Відкрийте демо
 
 Відкрийте у браузері:
+
 - Основна демо сторінка: `http://localhost:4321/uk/bff-demo`
 - Колекція: `http://localhost:4321/uk/collection/posts`
 
@@ -40,11 +41,11 @@ npm run dev
 
 ```astro
 ---
-import { fetchCollection } from '@/bff/client';
-import BaseLayout from '@/layouts/base/BaseLayout.astro';
+import { fetchCollection } from "@/bff/client";
+import BaseLayout from "@/layouts/base/BaseLayout.astro";
 
 // Отримуємо дані через BFF
-const result = await fetchCollection('posts', {
+const result = await fetchCollection("posts", {
   page: 1,
   limit: 5,
 });
@@ -53,21 +54,23 @@ const posts = result.success ? result.data : null;
 ---
 
 <BaseLayout title="My Posts">
-  {posts ? (
-    <div>
-      <h1>{posts.name}</h1>
-      <p>Всього: {posts.totalItems}</p>
-      
-      {posts.items.map(post => (
-        <article>
-          <h2>{post.title}</h2>
-          <p>{post.excerpt}</p>
-        </article>
-      ))}
-    </div>
-  ) : (
-    <p>Не вдалося завантажити дані</p>
-  )}
+  {
+    posts ? (
+      <div>
+        <h1>{posts.name}</h1>
+        <p>Всього: {posts.totalItems}</p>
+
+        {posts.items.map((post) => (
+          <article>
+            <h2>{post.title}</h2>
+            <p>{post.excerpt}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>Не вдалося завантажити дані</p>
+    )
+  }
 </BaseLayout>
 ```
 
@@ -78,56 +81,56 @@ const posts = result.success ? result.data : null;
 ### 1. Отримати колекцію
 
 ```typescript
-import { fetchCollection } from '@/bff/client';
+import { fetchCollection } from "@/bff/client";
 
-const result = await fetchCollection('posts', {
+const result = await fetchCollection("posts", {
   page: 1,
   limit: 10,
-  sortBy: 'date',
-  order: 'desc',
+  sortBy: "date",
+  order: "desc",
 });
 
 if (result.success) {
-  console.log('Items:', result.data.items);
+  console.log("Items:", result.data.items);
 } else {
-  console.error('Error:', result.error.userMessage);
+  console.error("Error:", result.error.userMessage);
 }
 ```
 
 ### 2. Пошук у колекції
 
 ```typescript
-import { searchCollection } from '@/bff/client';
+import { searchCollection } from "@/bff/client";
 
-const result = await searchCollection('posts', 'astro');
+const result = await searchCollection("posts", "astro");
 
 if (result.success) {
-  console.log('Found:', result.data.totalItems, 'items');
+  console.log("Found:", result.data.totalItems, "items");
 }
 ```
 
 ### 3. Агрегація кількох колекцій
 
 ```typescript
-import { fetchMultipleCollections } from '@/bff/client';
+import { fetchMultipleCollections } from "@/bff/client";
 
-const result = await fetchMultipleCollections(['posts', 'products']);
+const result = await fetchMultipleCollections(["posts", "products"]);
 
 if (result.success) {
-  console.log('Posts:', result.data.posts);
-  console.log('Products:', result.data.products);
+  console.log("Posts:", result.data.posts);
+  console.log("Products:", result.data.products);
 }
 ```
 
 ### 4. Отримати користувача
 
 ```typescript
-import { fetchUser } from '@/bff/client';
+import { fetchUser } from "@/bff/client";
 
-const result = await fetchUser('123');
+const result = await fetchUser("123");
 
 if (result.success) {
-  console.log('User:', result.data.displayName);
+  console.log("User:", result.data.displayName);
 }
 ```
 
@@ -173,14 +176,14 @@ export interface ProductDTO {
 У `src/bff/transformers/product.transformer.ts`:
 
 ```typescript
-import type { ApiProductResponse, ProductDTO } from '../types';
+import type { ApiProductResponse, ProductDTO } from "../types";
 
 export function transformProduct(api: ApiProductResponse): ProductDTO {
   return {
     id: String(api.id),
     name: api.name,
     formattedPrice: `${api.price} грн`,
-    createdDate: new Date(api.created_at).toLocaleDateString('uk-UA'),
+    createdDate: new Date(api.created_at).toLocaleDateString("uk-UA"),
   };
 }
 ```
@@ -190,10 +193,10 @@ export function transformProduct(api: ApiProductResponse): ProductDTO {
 У `src/bff/services/product.service.ts`:
 
 ```typescript
-import { createApiClient } from '../http/api-client';
-import { transformProduct } from '../transformers/product.transformer';
-import { transformError } from '../transformers/error.transformer';
-import type { BFFResponse, ProductDTO } from '../types';
+import { createApiClient } from "../http/api-client";
+import { transformProduct } from "../transformers/product.transformer";
+import { transformError } from "../transformers/error.transformer";
+import type { BFFResponse, ProductDTO } from "../types";
 
 export async function getProduct(id: string): Promise<BFFResponse<ProductDTO>> {
   try {
@@ -213,15 +216,15 @@ export async function getProduct(id: string): Promise<BFFResponse<ProductDTO>> {
 У `src/pages/api/bff/products/[id].ts`:
 
 ```typescript
-import type { APIRoute } from 'astro';
-import { getProduct } from '@/bff/services/product.service';
+import type { APIRoute } from "astro";
+import { getProduct } from "@/bff/services/product.service";
 
 export const GET: APIRoute = async ({ params }) => {
   const result = await getProduct(params.id!);
-  
+
   return new Response(JSON.stringify(result), {
     status: result.success ? 200 : 500,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
   });
 };
 ```
@@ -231,7 +234,9 @@ export const GET: APIRoute = async ({ params }) => {
 У `src/bff/client/index.ts`:
 
 ```typescript
-export async function fetchProduct(id: string): Promise<BFFResponse<ProductDTO>> {
+export async function fetchProduct(
+  id: string,
+): Promise<BFFResponse<ProductDTO>> {
   const baseUrl = getBFFBaseUrl();
   const url = `${baseUrl}/products/${id}`;
 
@@ -242,9 +247,9 @@ export async function fetchProduct(id: string): Promise<BFFResponse<ProductDTO>>
     return {
       success: false,
       error: {
-        code: 'NETWORK_ERROR',
-        message: error instanceof Error ? error.message : 'Network error',
-        userMessage: 'Помилка з\'єднання',
+        code: "NETWORK_ERROR",
+        message: error instanceof Error ? error.message : "Network error",
+        userMessage: "Помилка з'єднання",
         timestamp: new Date().toISOString(),
       },
     };
@@ -256,19 +261,21 @@ export async function fetchProduct(id: string): Promise<BFFResponse<ProductDTO>>
 
 ```astro
 ---
-import { fetchProduct } from '@/bff/client';
+import { fetchProduct } from "@/bff/client";
 
-const result = await fetchProduct('123');
+const result = await fetchProduct("123");
 const product = result.success ? result.data : null;
 ---
 
-{product && (
-  <div>
-    <h1>{product.name}</h1>
-    <p>{product.formattedPrice}</p>
-    <p>{product.createdDate}</p>
-  </div>
-)}
+{
+  product && (
+    <div>
+      <h1>{product.name}</h1>
+      <p>{product.formattedPrice}</p>
+      <p>{product.createdDate}</p>
+    </div>
+  )
+}
 ```
 
 ## 📚 Корисні ресурси
@@ -321,6 +328,7 @@ const product = result.success ? result.data : null;
 **Причина:** Не налаштовано змінну середовища
 
 **Рішення:**
+
 ```bash
 # Додайте у .env
 PUBLIC_API_URL=https://your-api.com
@@ -331,6 +339,7 @@ PUBLIC_API_URL=https://your-api.com
 **Причина:** TypeScript не знайшов шлях
 
 **Рішення:** Перезапустіть dev сервер:
+
 ```bash
 npm run dev
 ```
@@ -340,6 +349,7 @@ npm run dev
 **Причина:** API відповідає занадто повільно
 
 **Рішення:** Збільште timeout у `api-client.ts`:
+
 ```typescript
 const apiClient = new ApiClient({
   timeout: 60000, // 60 секунд
@@ -369,4 +379,3 @@ const apiClient = new ApiClient({
 ---
 
 **Готові почати?** Запустіть `npm run dev` та відкрийте `/uk/bff-demo`! 🎉
-

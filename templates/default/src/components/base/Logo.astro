@@ -1,8 +1,11 @@
 ---
-const { withText = true, className = '' } = Astro.props;
+const { withText = true, className = "" } = Astro.props;
 ---
 
-<a href="/" class={`flex items-center gap-2 text-blue-900 font-bold text-lg ${className}`}>
-    <img src="/logo.svg" alt="ZNU Logo" class="h-8 w-auto" />
-    {withText && <span>ЗНУ</span>}
+<a
+  href="/"
+  class={`flex items-center gap-2 text-blue-900 font-bold text-lg ${className}`}
+>
+  <img src="/logo.svg" alt="ZNU Logo" class="h-8 w-auto" />
+  {withText && <span>ЗНУ</span>}
 </a>

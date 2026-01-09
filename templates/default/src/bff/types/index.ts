@@ -1,6 +1,6 @@
 /**
  * BFF Types and DTOs
- * 
+ *
  * Цей файл містить типи даних, які використовуються у BFF шарі.
  * DTO (Data Transfer Objects) - це об'єкти, що передаються між шарами додатку.
  */
@@ -115,7 +115,6 @@ export interface PaginationParams {
 export interface CollectionQueryParams extends PaginationParams {
   tags?: string[];
   author?: string;
-  sortBy?: 'date' | 'title' | 'popularity';
-  order?: 'asc' | 'desc';
+  sortBy?: "date" | "title" | "popularity";
+  order?: "asc" | "desc";
 }
-

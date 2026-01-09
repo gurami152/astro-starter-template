@@ -1,13 +1,13 @@
 /**
  * User Service
- * 
+ *
  * Сервіс для роботи з користувачами.
  */
 
-import { createApiClient } from '../http/api-client';
-import { transformUser, transformUsers } from '../transformers';
-import { transformError, logError } from '../transformers/error.transformer';
-import type { ApiUserResponse, UserDTO, BFFResponse } from '../types';
+import { createApiClient } from "../http/api-client";
+import { transformUser, transformUsers } from "../transformers";
+import { transformError, logError } from "../transformers/error.transformer";
+import type { ApiUserResponse, UserDTO, BFFResponse } from "../types";
 
 /**
  * Отримує інформацію про користувача
@@ -15,7 +15,9 @@ import type { ApiUserResponse, UserDTO, BFFResponse } from '../types';
 export async function getUser(userId: string): Promise<BFFResponse<UserDTO>> {
   try {
     const apiClient = createApiClient();
-    const apiResponse = await apiClient.get<ApiUserResponse>(`/users/${userId}`);
+    const apiResponse = await apiClient.get<ApiUserResponse>(
+      `/users/${userId}`,
+    );
     const userDTO = transformUser(apiResponse);
 
     return {
@@ -40,11 +42,11 @@ export async function getUsers(params?: {
 }): Promise<BFFResponse<UserDTO[]>> {
   try {
     const queryParams = new URLSearchParams();
-    if (params?.page) queryParams.set('page', String(params.page));
-    if (params?.limit) queryParams.set('limit', String(params.limit));
+    if (params?.page) queryParams.set("page", String(params.page));
+    if (params?.limit) queryParams.set("limit", String(params.limit));
 
     const queryString = queryParams.toString();
-    const path = `/users${queryString ? `?${queryString}` : ''}`;
+    const path = `/users${queryString ? `?${queryString}` : ""}`;
 
     const apiClient = createApiClient();
     const apiResponse = await apiClient.get<ApiUserResponse[]>(path);
@@ -58,7 +60,7 @@ export async function getUsers(params?: {
       },
     };
   } catch (error) {
-    logError(error, 'getUsers');
+    logError(error, "getUsers");
     return transformError(error);
   }
 }
@@ -66,10 +68,12 @@ export async function getUsers(params?: {
 /**
  * Отримує поточного авторизованого користувача
  */
-export async function getCurrentUser(token?: string): Promise<BFFResponse<UserDTO>> {
+export async function getCurrentUser(
+  token?: string,
+): Promise<BFFResponse<UserDTO>> {
   try {
     const apiClient = createApiClient();
-    const apiResponse = await apiClient.get<ApiUserResponse>('/users/me', {
+    const apiResponse = await apiClient.get<ApiUserResponse>("/users/me", {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
     const userDTO = transformUser(apiResponse);
@@ -82,8 +86,7 @@ export async function getCurrentUser(token?: string): Promise<BFFResponse<UserDT
       },
     };
   } catch (error) {
-    logError(error, 'getCurrentUser');
+    logError(error, "getCurrentUser");
     return transformError(error);
   }
 }
-

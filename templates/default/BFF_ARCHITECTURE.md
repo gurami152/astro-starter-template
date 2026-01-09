@@ -73,10 +73,10 @@ BFF (Backend for Frontend) шар у цьому шаблоні реалізов�
 
 ```typescript
 // У Astro компоненті
-const result = await fetchCollection('posts', {
+const result = await fetchCollection("posts", {
   page: 1,
   limit: 10,
-  sortBy: 'date',
+  sortBy: "date",
 });
 ```
 
@@ -95,9 +95,9 @@ const response = await fetch(url);
 export const GET: APIRoute = async ({ params, request }) => {
   const { collection } = params;
   const queryParams = parseQueryParams(request.url);
-  
+
   const result = await getCollection(collection, queryParams);
-  
+
   return new Response(JSON.stringify(result), {
     status: result.success ? 200 : 500,
   });
@@ -113,13 +113,13 @@ export async function getCollection(name, params) {
     // 1. Викликаємо API
     const apiClient = createApiClient();
     const apiResponse = await apiClient.get(`/collections/${name}`);
-    
+
     // 2. Трансформуємо дані
     const dto = transformCollection(apiResponse);
-    
+
     // 3. Застосовуємо додаткові фільтри
     dto.items = filterAndSortCollectionItems(dto.items, params);
-    
+
     // 4. Повертаємо результат
     return { success: true, data: dto };
   } catch (error) {
@@ -134,7 +134,7 @@ export async function getCollection(name, params) {
 // src/bff/http/api-client.ts
 async get(path) {
   const url = `${this.config.baseURL}${path}`;
-  
+
   // Retry логіка
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -195,9 +195,12 @@ interface CollectionDTO {
 Уніфікований формат відповіді BFF:
 
 ```typescript
-type BFFResponse<T> = 
+type BFFResponse<T> =
   | { success: true; data: T; meta?: { cached: boolean; duration?: number } }
-  | { success: false; error: { code: string; message: string; userMessage: string } };
+  | {
+      success: false;
+      error: { code: string; message: string; userMessage: string };
+    };
 ```
 
 ## Принципи проектування
@@ -205,6 +208,7 @@ type BFFResponse<T> =
 ### 1. Separation of Concerns
 
 Кожен шар має свою відповідальність:
+
 - **Client**: URL формування та базова обробка помилок
 - **Endpoints**: HTTP специфіка (запити, відповіді, валідація)
 - **Services**: Бізнес-логіка та orchestration
@@ -214,6 +218,7 @@ type BFFResponse<T> =
 ### 2. Single Responsibility
 
 Кожна функція має одну відповідальність:
+
 - `transformCollection` - трансформує колекцію
 - `filterAndSortCollectionItems` - фільтрує та сортує
 - `getCollection` - orchestrate весь процес отримання колекції
@@ -221,6 +226,7 @@ type BFFResponse<T> =
 ### 3. Don't Repeat Yourself (DRY)
 
 Загальна логіка винесена в окремі функції:
+
 - `createApiClient()` - створення API клієнта
 - `transformError()` - трансформація помилок
 - `getBFFBaseUrl()` - отримання базового URL
@@ -259,10 +265,18 @@ HTTP Client діє як repository для зовнішніх API:
 
 ```typescript
 class ApiClient {
-  async get<T>(path: string): Promise<T> { /* ... */ }
-  async post<T>(path: string, data: unknown): Promise<T> { /* ... */ }
-  async put<T>(path: string, data: unknown): Promise<T> { /* ... */ }
-  async delete<T>(path: string): Promise<T> { /* ... */ }
+  async get<T>(path: string): Promise<T> {
+    /* ... */
+  }
+  async post<T>(path: string, data: unknown): Promise<T> {
+    /* ... */
+  }
+  async put<T>(path: string, data: unknown): Promise<T> {
+    /* ... */
+  }
+  async delete<T>(path: string): Promise<T> {
+    /* ... */
+  }
 }
 ```
 
@@ -273,7 +287,9 @@ class ApiClient {
 ```typescript
 // API Response -> DTO
 export function transformX(apiX: ApiXResponse): XDTO {
-  return { /* трансформована структура */ };
+  return {
+    /* трансформована структура */
+  };
 }
 ```
 
@@ -282,7 +298,9 @@ export function transformX(apiX: ApiXResponse): XDTO {
 Сервіси інкапсулюють бізнес-логіку:
 
 ```typescript
-export async function getCollection(name: string): Promise<BFFResponse<CollectionDTO>> {
+export async function getCollection(
+  name: string,
+): Promise<BFFResponse<CollectionDTO>> {
   // 1. Отримати дані
   // 2. Трансформувати
   // 3. Обробити помилки
@@ -295,9 +313,9 @@ export async function getCollection(name: string): Promise<BFFResponse<Collectio
 Створення об'єктів через factory функції:
 
 ```typescript
-export function createApiClient(apiName: string = 'MAIN'): ApiClient {
+export function createApiClient(apiName: string = "MAIN"): ApiClient {
   const baseURL = import.meta.env[`${apiName}_API_URL`];
-  return new ApiClient({ baseURL, /* ... */ });
+  return new ApiClient({ baseURL /* ... */ });
 }
 ```
 
@@ -307,9 +325,9 @@ export function createApiClient(apiName: string = 'MAIN'): ApiClient {
 
 ```typescript
 function getErrorCode(error: Error, statusCode?: number): string {
-  if (error instanceof TimeoutError) return 'TIMEOUT';
-  if (error instanceof NetworkError) return 'NETWORK_ERROR';
-  if (statusCode === 404) return 'NOT_FOUND';
+  if (error instanceof TimeoutError) return "TIMEOUT";
+  if (error instanceof NetworkError) return "NETWORK_ERROR";
+  if (statusCode === 404) return "NOT_FOUND";
   // ...
 }
 ```
@@ -333,10 +351,10 @@ Error (базовий клас)
 interface BFFErrorDTO {
   success: false;
   error: {
-    code: string;           // Машиночитаємий код
-    message: string;        // Технічне повідомлення
-    userMessage: string;    // Повідомлення для користувача
-    timestamp: string;      // Час помилки
+    code: string; // Машиночитаємий код
+    message: string; // Технічне повідомлення
+    userMessage: string; // Повідомлення для користувача
+    timestamp: string; // Час помилки
   };
 }
 ```
@@ -349,11 +367,11 @@ interface BFFErrorDTO {
 
 ```typescript
 // Замість цього у UI:
-const posts = await fetch('/api/posts');
-const products = await fetch('/api/products');
+const posts = await fetch("/api/posts");
+const products = await fetch("/api/products");
 
 // Використовуємо агрегацію у BFF:
-const data = await fetchMultipleCollections(['posts', 'products']);
+const data = await fetchMultipleCollections(["posts", "products"]);
 ```
 
 ### 2. Кешування
@@ -364,7 +382,7 @@ BFF може кешувати дані на своєму рівні:
 // У endpoint
 return new Response(JSON.stringify(result), {
   headers: {
-    'Cache-Control': 'public, max-age=60', // Кешування на 1 хвилину
+    "Cache-Control": "public, max-age=60", // Кешування на 1 хвилину
   },
 });
 ```
@@ -375,7 +393,7 @@ BFF може робити паралельні запити до різних AP
 
 ```typescript
 export async function getMultipleCollections(names: string[]) {
-  const promises = names.map(name => getCollection(name));
+  const promises = names.map((name) => getCollection(name));
   const results = await Promise.all(promises); // Паралельно
   // ...
 }
@@ -391,7 +409,7 @@ API ключі та токени зберігаються тільки на се
 // У BFF (безпечно)
 const apiClient = new ApiClient({
   headers: {
-    'Authorization': `Bearer ${import.meta.env.API_SECRET_KEY}`,
+    Authorization: `Bearer ${import.meta.env.API_SECRET_KEY}`,
   },
 });
 
@@ -403,10 +421,15 @@ const apiClient = new ApiClient({
 ```typescript
 export const GET: APIRoute = async ({ params }) => {
   if (!params.collection) {
-    return new Response(JSON.stringify({
-      success: false,
-      error: { /* ... */ }
-    }), { status: 400 });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          /* ... */
+        },
+      }),
+      { status: 400 },
+    );
   }
   // ...
 };
@@ -418,7 +441,7 @@ BFF може контролювати rate limiting:
 
 ```typescript
 // Можна додати middleware для rate limiting
-const rateLimiter = new RateLimiter({ max: 100, window: '1m' });
+const rateLimiter = new RateLimiter({ max: 100, window: "1m" });
 ```
 
 ## Тестування
@@ -428,11 +451,13 @@ const rateLimiter = new RateLimiter({ max: 100, window: '1m' });
 Тестування окремих функцій:
 
 ```typescript
-describe('transformCollection', () => {
-  it('should transform API response to DTO', () => {
-    const apiResponse = { /* ... */ };
+describe("transformCollection", () => {
+  it("should transform API response to DTO", () => {
+    const apiResponse = {
+      /* ... */
+    };
     const dto = transformCollection(apiResponse);
-    expect(dto.name).toBe('posts');
+    expect(dto.name).toBe("posts");
   });
 });
 ```
@@ -442,9 +467,9 @@ describe('transformCollection', () => {
 Тестування взаємодії між шарами:
 
 ```typescript
-describe('getCollection', () => {
-  it('should fetch and transform collection', async () => {
-    const result = await getCollection('posts');
+describe("getCollection", () => {
+  it("should fetch and transform collection", async () => {
+    const result = await getCollection("posts");
     expect(result.success).toBe(true);
     expect(result.data.items).toBeInstanceOf(Array);
   });
@@ -456,9 +481,9 @@ describe('getCollection', () => {
 Тестування всього потоку:
 
 ```typescript
-test('should display posts on page', async ({ page }) => {
-  await page.goto('/posts');
-  const posts = await page.locator('.post-item');
+test("should display posts on page", async ({ page }) => {
+  await page.goto("/posts");
+  const posts = await page.locator(".post-item");
   expect(await posts.count()).toBeGreaterThan(0);
 });
 ```
@@ -494,7 +519,7 @@ await redis.setex(cacheKey, 300, JSON.stringify(data));
 ```typescript
 return new Response(JSON.stringify(result), {
   headers: {
-    'Cache-Control': 'public, s-maxage=3600', // CDN кешування
+    "Cache-Control": "public, s-maxage=3600", // CDN кешування
   },
 });
 ```
@@ -511,4 +536,3 @@ return new Response(JSON.stringify(result), {
 8. **Валідуйте вхідні дані** на рівні endpoints
 9. **Документуйте** всі endpoints та типи
 10. **Тестуйте** кожен шар окремо та інтеграційно
-
