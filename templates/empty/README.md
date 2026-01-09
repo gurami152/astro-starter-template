@@ -34,14 +34,33 @@ To learn more about the folder structure of an Astro project, refer to [our guid
 
 All commands are run from the root of the project, from a terminal:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command                   | Action                                            |
+| :------------------------ | :------------------------------------------------ |
+| `npm install`             | Installs dependencies                             |
+| `npm run dev`             | Starts local dev server at `localhost:4321`       |
+| `npm run build`           | Build your production site to `./dist/`           |
+| `npm run preview`         | Preview your build locally, before deploying      |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check`  |
+| `npm run astro -- --help` | Get help using the Astro CLI                      |
+| `npm run lint`            | Runs ESLint to check for code issues              |
+| `npm run format`          | Runs Prettier to format code and Tailwind classes |
+
+## 🛠 Якість коду
+
+Для підтримки чистоти та єдиного стилю коду в проєкті налаштовані **ESLint** та **Prettier**.
+
+- **ESLint**: Перевіряє код на логічні помилки та дотримання стандартів TypeScript та Astro.
+- **Prettier**: Автоматично виправляє відступи, лапки та сортує Tailwind CSS класи у правильному порядку.
+
+### Як використовувати:
+
+```bash
+# Тільки перевірка
+npm run lint
+
+# Автоматичне виправлення стилю у всьому проєкті
+npm run format
+```
 
 ## 👀 Want to learn more?
 

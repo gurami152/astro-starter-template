@@ -8,7 +8,7 @@ import { getI18n } from "@utils/i18n";
 const { lang, t } = getI18n(Astro.params.lang);
 ---
 
-<Hero 
+<Hero
   title={t.hero.title}
   subtitle={t.hero.subtitle}
   ctaText={t.hero.cta}
@@ -16,36 +16,40 @@ const { lang, t } = getI18n(Astro.params.lang);
 />
 
 <Container class="py-16">
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {t.features.map((feature) => (
-      <Card hover={true}>
-        <div class="flex items-center mb-4">
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mr-4">
-            <span class="text-2xl">{feature.icon}</span>
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    {
+      t.features.map((feature) => (
+        <Card hover={true}>
+          <div class="mb-4 flex items-center">
+            <div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900">
+              <span class="text-2xl">{feature.icon}</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              {feature.title}
+            </h3>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-            {feature.title}
-          </h3>
-        </div>
-        <p class="text-gray-600 dark:text-gray-300">
-          {feature.description}
-        </p>
-      </Card>
-    ))}
+          <p class="text-gray-600 dark:text-gray-300">{feature.description}</p>
+        </Card>
+      ))
+    }
   </div>
 </Container>
 
-<section class="bg-gray-50 dark:bg-gray-800 py-16 border-t border-gray-200 dark:border-gray-700">
+<section
+  class="border-t border-gray-200 bg-gray-50 py-16 dark:border-gray-700 dark:bg-gray-800"
+>
   <Container>
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <div class="mb-12 text-center">
+      <h2
+        class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl dark:text-white"
+      >
         {t.cta.title}
       </h2>
-      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      <p class="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-300">
         {t.cta.description}
       </p>
     </div>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+    <div class="flex flex-col justify-center gap-4 sm:flex-row">
       <Button size="lg" href={`/${lang}/docs/getting-started`}>
         {t.cta.primary}
       </Button>

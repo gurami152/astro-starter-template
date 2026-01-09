@@ -14,62 +14,75 @@ export interface Props {
 }
 
 const {
-  title = 'Blog Post',
+  title = "Blog Post",
   description,
   image,
   canonical,
   publishDate,
   author,
   tags = [],
-  class: className = '',
+  class: className = "",
 } = Astro.props;
 
 const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 };
 ---
 
-<BaseLayout title={title} description={description} image={image} canonical={canonical}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  canonical={canonical}
+>
   <Container class={`py-8 md:py-12 max-w-4xl ${className}`}>
     <article class="prose prose-lg dark:prose-invert max-w-none">
       <header class="mb-8 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1
+          class="mb-4 text-4xl font-bold text-gray-900 md:text-5xl dark:text-white"
+        >
           {title}
         </h1>
-        
-        {description && (
-          <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
-            {description}
-          </p>
-        )}
-        
-        <div class="flex items-center justify-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-          {publishDate && (
-            <time datetime={publishDate.toISOString()}>
-              {formatDate(publishDate)}
-            </time>
-          )}
-          
-          {author && (
-            <span>by {author}</span>
-          )}
+
+        {
+          description && (
+            <p class="mb-6 text-xl text-gray-600 dark:text-gray-300">
+              {description}
+            </p>
+          )
+        }
+
+        <div
+          class="flex items-center justify-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
+        >
+          {
+            publishDate && (
+              <time datetime={publishDate.toISOString()}>
+                {formatDate(publishDate)}
+              </time>
+            )
+          }
+
+          {author && <span>by {author}</span>}
         </div>
-        
-        {tags.length > 0 && (
-          <div class="flex flex-wrap justify-center gap-2 mt-4">
-            {tags.map(tag => (
-              <span class="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+
+        {
+          tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap justify-center gap-2">
+              {tags.map((tag) => (
+                <span class="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
       </header>
-      
+
       <div class="content">
         <slot />
       </div>
@@ -79,36 +92,37 @@ const formatDate = (date: Date) => {
 
 <style>
   @reference "tailwindcss";
-  
+
   .content :global(h2) {
-    @apply text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4;
+    @apply mt-8 mb-4 text-2xl font-bold text-gray-900 dark:text-white;
   }
-  
+
   .content :global(h3) {
-    @apply text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3;
+    @apply mt-6 mb-3 text-xl font-semibold text-gray-900 dark:text-white;
   }
-  
+
   .content :global(p) {
-    @apply text-gray-700 dark:text-gray-300 mb-4 leading-relaxed;
+    @apply mb-4 leading-relaxed text-gray-700 dark:text-gray-300;
   }
-  
-  .content :global(ul), .content :global(ol) {
+
+  .content :global(ul),
+  .content :global(ol) {
     @apply mb-4 pl-6;
   }
-  
+
   .content :global(li) {
-    @apply text-gray-700 dark:text-gray-300 mb-1;
+    @apply mb-1 text-gray-700 dark:text-gray-300;
   }
-  
+
   .content :global(blockquote) {
-    @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 dark:text-gray-400 my-6;
+    @apply my-6 border-l-4 border-blue-500 pl-4 text-gray-600 italic dark:text-gray-400;
   }
-  
+
   .content :global(code) {
-    @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm;
+    @apply rounded bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800;
   }
-  
+
   .content :global(pre) {
-    @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4;
+    @apply mb-4 overflow-x-auto rounded-lg bg-gray-100 p-4 dark:bg-gray-800;
   }
 </style>
