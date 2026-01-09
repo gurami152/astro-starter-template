@@ -5,12 +5,14 @@
 ## 📁 Структура папок
 
 ### `/base` - Базові layouts
+
 Основні layouts, які використовуються як основа для інших:
 
 - **BaseLayout.astro** - Основний layout з HTML структурою, Header, Footer та SEO
 - **ErrorLayout.astro** - Layout для сторінок помилок (404, 500, тощо)
 
 ### `/content` - Layouts для контенту
+
 Layouts для різних типів контенту:
 
 - **PageLayout.astro** - Layout для звичайних сторінок з контентом
@@ -28,13 +30,14 @@ Layouts для різних типів контенту:
 ## 📝 Використання
 
 ### BaseLayout
+
 ```astro
 ---
 import BaseLayout from "@/layouts/base/BaseLayout.astro";
 ---
 
-<BaseLayout 
-  title="My Page" 
+<BaseLayout
+  title="My Page"
   description="Page description"
   image="/og-image.jpg"
   canonical="https://example.com/page"
@@ -44,29 +47,28 @@ import BaseLayout from "@/layouts/base/BaseLayout.astro";
 ```
 
 ### PageLayout
+
 ```astro
 ---
 import PageLayout from "@/layouts/content/PageLayout.astro";
 ---
 
-<PageLayout 
-  title="About Us" 
-  showBreadcrumbs={true}
->
+<PageLayout title="About Us" showBreadcrumbs={true}>
   <h1>About Us</h1>
   <p>Content here...</p>
 </PageLayout>
 ```
 
 ### BlogLayout
+
 ```astro
 ---
 import BlogLayout from "@/layouts/content/BlogLayout.astro";
 
-const publishDate = new Date('2024-01-15');
+const publishDate = new Date("2024-01-15");
 ---
 
-<BlogLayout 
+<BlogLayout
   title="My Blog Post"
   description="Post description"
   publishDate={publishDate}
@@ -78,12 +80,13 @@ const publishDate = new Date('2024-01-15');
 ```
 
 ### ErrorLayout
+
 ```astro
 ---
 import ErrorLayout from "@/layouts/base/ErrorLayout.astro";
 ---
 
-<ErrorLayout 
+<ErrorLayout
   title="Page Not Found"
   description="The page you're looking for doesn't exist."
   code={404}
@@ -93,6 +96,7 @@ import ErrorLayout from "@/layouts/base/ErrorLayout.astro";
 ## 🔧 Налаштування
 
 Всі layouts підтримують:
+
 - Темну тему
 - SEO мета-теги
 - Responsive дизайн

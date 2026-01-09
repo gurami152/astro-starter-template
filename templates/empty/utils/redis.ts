@@ -1,9 +1,9 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 /**
  * Цей файл створює та експортує єдиний екземпляр (singleton) Redis-клієнта.
  * Це запобігає створенню нових підключень при кожному запиті до API.
- * 
+ *
  * Клієнт автоматично використовує `REDIS_URL` зі змінних оточення.
  */
 
@@ -12,15 +12,15 @@ import Redis from 'ioredis';
 const redis = new Redis(import.meta.env.REDIS_URL, {
   // Додаткові налаштування для продакшену
   // Наприклад, для кращої обробки помилок
-  maxRetriesPerRequest: null, 
+  maxRetriesPerRequest: null,
 });
 
-redis.on('connect', () => {
-  console.log('Connected to Redis successfully!');
+redis.on("connect", () => {
+  console.log("Connected to Redis successfully!");
 });
 
-redis.on('error', (err) => {
-  console.error('Could not connect to Redis:', err);
+redis.on("error", (err) => {
+  console.error("Could not connect to Redis:", err);
 });
 
-export default redis; 
+export default redis;

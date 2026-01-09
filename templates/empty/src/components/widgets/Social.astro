@@ -1,29 +1,40 @@
 ---
-import { SiteConfig } from '../../config/SiteConfig';
+import { SiteConfig } from "../../config/SiteConfig";
 
 const socialLinks = [
-    {
-        name: 'Facebook',
-        href: SiteConfig.social.facebook,
-        icon: '/icons/facebook.svg',
-    },
-    {
-        name: 'Instagram',
-        href: SiteConfig.social.instagram,
-        icon: '/icons/instagram.svg',
-    },
-    {
-        name: 'YouTube',
-        href: SiteConfig.social.youtube,
-        icon: '/icons/youtube.svg',
-    },
+  {
+    name: "Facebook",
+    href: SiteConfig.social.facebook,
+    icon: "/icons/facebook.svg",
+  },
+  {
+    name: "Instagram",
+    href: SiteConfig.social.instagram,
+    icon: "/icons/instagram.svg",
+  },
+  {
+    name: "YouTube",
+    href: SiteConfig.social.youtube,
+    icon: "/icons/youtube.svg",
+  },
 ];
 ---
 
-<div class="flex gap-4 items-center justify-center">
-    {socialLinks.map((item) => (
-            <a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.name}>
-                <img src={item.icon} alt={item.name} class="w-6 h-6 hover:scale-110 transition-transform duration-200" />
-            </a>
-    ))}
+<div class="flex items-center justify-center gap-4">
+  {
+    socialLinks.map((item) => (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={item.name}
+      >
+        <img
+          src={item.icon}
+          alt={item.name}
+          class="h-6 w-6 transition-transform duration-200 hover:scale-110"
+        />
+      </a>
+    ))
+  }
 </div>

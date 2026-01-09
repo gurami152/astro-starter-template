@@ -6,65 +6,87 @@ import { getI18n } from "@utils/i18n";
 const { lang } = getI18n(Astro.params.lang);
 ---
 
-<footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<footer
+  class="border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+>
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-4">
       <!-- Logo and description -->
       <div class="col-span-1 md:col-span-2">
         <Logo />
-        <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-md">
-          A modern Astro starter template with internationalization support, built with Tailwind CSS.
+        <p class="mt-4 max-w-md text-gray-600 dark:text-gray-400">
+          A modern Astro starter template with internationalization support,
+          built with Tailwind CSS.
         </p>
         <div class="mt-6">
           <Social />
         </div>
       </div>
-      
+
       <!-- Quick links -->
       <div>
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+        <h3
+          class="text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-white"
+        >
           Quick Links
         </h3>
         <ul class="mt-4 space-y-2">
           <li>
-            <a href={`/${lang}`} class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+            <a
+              href={`/${lang}`}
+              class="text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
               Home
             </a>
           </li>
           <li>
-            <a href={`/${lang}/about`} class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+            <a
+              href={`/${lang}/about`}
+              class="text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
               About
             </a>
           </li>
           <li>
-            <a href={`/${lang}/contact`} class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+            <a
+              href={`/${lang}/contact`}
+              class="text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
               Contact
             </a>
           </li>
         </ul>
       </div>
-      
+
       <!-- Resources -->
       <div>
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
+        <h3
+          class="text-sm font-semibold tracking-wider text-gray-900 uppercase dark:text-white"
+        >
           Resources
         </h3>
         <ul class="mt-4 space-y-2">
           <li>
-            <a href="https://astro.build" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+            <a
+              href="https://astro.build"
+              class="text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
               Astro Docs
             </a>
           </li>
           <li>
-            <a href="https://tailwindcss.com" class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
+            <a
+              href="https://tailwindcss.com"
+              class="text-gray-600 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+            >
               Tailwind CSS
             </a>
           </li>
         </ul>
       </div>
     </div>
-    
-    <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+
+    <div class="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700">
       <p class="text-center text-gray-500 dark:text-gray-400">
         © 2024 Astro Starter Template. All rights reserved.
       </p>
