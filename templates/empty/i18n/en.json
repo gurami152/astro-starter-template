@@ -2,7 +2,14 @@
   "pageTitle": "Modern Astro Starter Template",
   "hero": {
     "title": "Modern Astro Starter Template",
-    "subtitle": "A powerful starter template for Astro with Server-Side Rendering (SSR), ready-to-use Redis caching, and a Backend-for-Frontend (BFF) architecture."
+    "subtitle": "A powerful starter template for Astro with Server-Side Rendering (SSR), ready-to-use Redis caching, and a Backend-for-Frontend (BFF) architecture.",
+    "cta": "Get Started"
+  },
+  "cta": {
+    "title": "Ready to Get Started?",
+    "description": "Start building your next project with our modern Astro starter template.",
+    "primary": "View Documentation",
+    "secondary": "View on GitHub"
   },
   "usage": {
     "title": "Create a New Project",
@@ -14,27 +21,33 @@
     "title": "Key Features",
     "list": [
       {
-        "title": "🚀 Astro SSR",
+        "icon": "🚀",
+        "title": "Astro SSR",
         "description": "Configured for server-side rendering for maximum performance and SEO."
       },
       {
-        "title": "🛡️ Backend-for-Frontend (BFF)",
+        "icon": "🛡️",
+        "title": "Backend-for-Frontend (BFF)",
         "description": "A secure pattern for working with APIs that protects your keys and simplifies logic."
       },
       {
-        "title": "⚡ Redis Caching",
+        "icon": "⚡",
+        "title": "Redis Caching",
         "description": "Ready-to-use Redis integration for production-level data caching."
       },
       {
-        "title": "🎨 Tailwind CSS",
+        "icon": "🎨",
+        "title": "Tailwind CSS",
         "description": "A modern utility-first CSS framework and a library of ready-made UI components."
       },
       {
-        "title": "🌐 Localization Ready",
+        "icon": "🌐",
+        "title": "Localization Ready",
         "description": "The project structure is ready for internationalization and multi-language support."
       },
       {
-        "title": "🔌 TypeScript",
+        "icon": "🔌",
+        "title": "TypeScript",
         "description": "Strong typing for reliable and scalable code."
       }
     ]
